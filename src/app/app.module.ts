@@ -3,6 +3,7 @@ import { UserModule } from 'src/user/user.module';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { ConfigModule } from '../config/config.module';
 import { ConfigService } from '../config/config.service';
+import { BillModule } from 'src/bill/bill.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -15,7 +16,8 @@ import { ConfigService } from '../config/config.service';
       },
       inject: [ConfigService],
     }),
-    UserModule
+    UserModule,
+    BillModule
   ],
 })
 export class AppModule { }
