@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthUserDto } from './dto/auth-user.dto';
+import { UpdateBalanceDto } from './dto/update-balance.dto';
 
 @Controller('user')
 export class UserController {
@@ -37,4 +38,10 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
+
+  @Patch(':id/balance')
+  updateBalance(@Param('id') id: string, @Body() body: UpdateBalanceDto) {
+    return this.userService.updateBalance(id, body);
+  }
+
 }
