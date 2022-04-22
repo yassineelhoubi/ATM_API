@@ -1,11 +1,11 @@
 import { IsString, IsInt } from 'class-validator'
 export class BillDto {
     @IsInt()
-    billNumber: string;
+    billNumber: number;
 
     @IsString()
     company: string;
 
-    @IsString()
-    amount: string;
+    @IsInt()
+    amount: number;
 }

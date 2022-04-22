@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
-
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Bill } from './bill.schema';
 @Injectable()
 export class BillService {
+
+  constructor(
+    @InjectModel(Bill.name) private readonly billModel: Model<Bill>,
+  ) { }
+
   create(createBillDto: CreateBillDto) {
-    return 'This action adds a new bill';
+    const createdBill = new this.billModel(createBillDto);
+    return createdBill.save();
   }
 
   findAll() {
