@@ -30,8 +30,8 @@ export class UserService {
     return this.userModel.findOne({ ccn: body.ccn, PIN: body.PIN });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
   }
 
   remove(id: number) {
