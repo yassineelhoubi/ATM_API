@@ -5,7 +5,7 @@ import { UpdateBillDto } from './dto/update-bill.dto';
 
 @Controller('bill')
 export class BillController {
-  constructor(private readonly billService: BillService) {}
+  constructor(private readonly billService: BillService) { }
 
   @Post()
   create(@Body() createBillDto: CreateBillDto) {
@@ -24,7 +24,7 @@ export class BillController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBillDto: UpdateBillDto) {
-    return this.billService.update(+id, updateBillDto);
+    return this.billService.update(id, updateBillDto);
   }
 
   @Delete(':id')

@@ -1,4 +1,4 @@
-import { IsString, IsInt } from 'class-validator'
+import { IsString, IsInt, IsEnum } from 'class-validator'
 export class BillDto {
     @IsInt()
     billNumber: number;
@@ -8,4 +8,8 @@ export class BillDto {
 
     @IsInt()
     amount: number;
+
+    @IsString()
+    @IsEnum(['ongoing', 'paid'])
+    status: string;
 }

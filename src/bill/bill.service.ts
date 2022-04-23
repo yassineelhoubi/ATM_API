@@ -24,8 +24,8 @@ export class BillService {
     return `This action returns a #${id} bill`;
   }
 
-  update(id: number, updateBillDto: UpdateBillDto) {
-    return `This action updates a #${id} bill`;
+  update(id: string, updateBillDto: UpdateBillDto) {
+    return this.billModel.findByIdAndUpdate(id, updateBillDto, { new: true });
   }
 
   remove(id: number) {
