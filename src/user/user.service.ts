@@ -54,6 +54,11 @@ export class UserService {
     }
 
   }
+
+  deductBalance(id: string, balance: number, amount: number) {
+    const newBalance = balance - amount;
+    return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
+  }
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
