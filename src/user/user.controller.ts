@@ -49,4 +49,9 @@ export class UserController {
     return this.userService.withdrawBalance(id, body);
   }
 
+  @Patch(':id/mobile-recharge')
+  rechargeMobile(@Param('id') id: string, @Body() body: UpdateBalanceDto) {
+    return this.userService.mobileRecharge(id, body);
+  }
+
 }

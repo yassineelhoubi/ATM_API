@@ -7,11 +7,13 @@ import { Model } from 'mongoose';
 import { UserDto } from './dto/user.dto';
 import { AuthUserDto } from './dto/auth-user.dto';
 import { UpdateBalanceDto } from './dto/update-balance.dto';
+import { MailService } from 'src/mail/mail.service';
 @Injectable()
 export class UserService {
 
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private mailService: MailService
   ) { }
 
   create(createUserDto: CreateUserDto) {
@@ -80,5 +82,19 @@ export class UserService {
   }
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+  
+  async mobileRecharge(id: string, body: UpdateBalanceDto) {
+    try {
+      const userDoc = await this.userModel.findById(id);
+      if (userDoc.balance < body.balance) {
+        throw new Error('Insufficient balance');
+      }
+      const newBalance = userDoc.balance - body.balance;
+      await this.mailService.sendMail(userDoc);
+      return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
+    } catch (error) {
+      return error.message;
+    }
   }
 }
