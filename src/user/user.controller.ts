@@ -39,9 +39,14 @@ export class UserController {
     return this.userService.remove(+id);
   }
 
-  @Patch(':id/balance')
-  updateBalance(@Param('id') id: string, @Body() body: UpdateBalanceDto) {
-    return this.userService.updateBalance(id, body);
+  @Patch(':id/deposit-balance')
+  depositBalance(@Param('id') id: string, @Body() body: UpdateBalanceDto) {
+    return this.userService.depositBalance(id, body);
+  }
+
+  @Patch(':id/withdraw-balance')
+  withdrawBalance(@Param('id') id: string, @Body() body: UpdateBalanceDto) {
+    return this.userService.withdrawBalance(id, body);
   }
 
 }

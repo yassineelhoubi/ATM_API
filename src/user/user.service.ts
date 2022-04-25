@@ -35,24 +35,43 @@ export class UserService {
     return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
   }
 
-  async updateBalance(id: string, body: UpdateBalanceDto) {
+  // async updateBalance(id: string, body: UpdateBalanceDto) {
+  //   try {
+  //     if (body.actionType === 'deposit') {
+  //       const { balance } = await this.userModel.findById(id).select('balance');
+  //       const newBalance = balance + body.balance;
+  //       return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
+  //     } else {
+  //       const { balance } = await this.userModel.findById(id).select('balance');
+  //       if (balance < body.balance) {
+  //         throw new Error('Insufficient balance');
+  //       }
+  //       const newBalance = balance - body.balance;
+  //       return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
+  //     }
+  //   } catch (error) {
+  //     return error.message;
+  //   }
+
+  // }
+
+  async depositBalance(id: string, body: UpdateBalanceDto) {
+    const { balance } = await this.userModel.findById(id).select('balance');
+    const newBalance = balance + body.balance;
+    return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
+  }
+
+  async withdrawBalance(id: string, body: UpdateBalanceDto) {
     try {
-      if (body.actionType === 'deposit') {
-        const { balance } = await this.userModel.findById(id).select('balance');
-        const newBalance = balance + body.balance;
-        return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
-      } else {
-        const { balance } = await this.userModel.findById(id).select('balance');
-        if (balance < body.balance) {
-          throw new Error('Insufficient balance');
-        }
-        const newBalance = balance - body.balance;
-        return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
+      const { balance } = await this.userModel.findById(id).select('balance');
+      if (balance < body.balance) {
+        throw new Error('Insufficient balance');
       }
+      const newBalance = balance - body.balance;
+      return this.userModel.findByIdAndUpdate(id, { balance: newBalance }, { new: true });
     } catch (error) {
       return error.message;
     }
-
   }
 
   deductBalance(id: string, balance: number, amount: number) {
