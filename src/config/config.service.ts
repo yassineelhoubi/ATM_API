@@ -21,6 +21,10 @@ export class ConfigService {
     private validateInput(envConfig: EnvConfig): EnvConfig {
         const envVarsSchema: Joi.ObjectSchema = Joi.object({
             DATABASE_URI: Joi.string().required(),
+            MAIL_HOST: Joi.string().required(),
+            MAIL_USER: Joi.string().required(),
+            MAIL_PASSWORD: Joi.string().required(),
+            MAIL_FROM: Joi.string().required(),
         });
 
         const { error, value: validatedEnvConfig } =
