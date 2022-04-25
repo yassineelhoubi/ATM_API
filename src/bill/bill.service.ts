@@ -5,12 +5,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Bill } from './bill.schema';
 import { UserService } from 'src/user/user.service';
+import { MailService } from 'src/mail/mail.service';
 @Injectable()
 export class BillService {
 
   constructor(
     @InjectModel(Bill.name) private readonly billModel: Model<Bill>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private mailService: MailService
   ) { }
 
   create(createBillDto: CreateBillDto) {
@@ -28,13 +30,13 @@ export class BillService {
 
   async update(id: string, updateBillDto: UpdateBillDto) {
     try {
-      const { balance } = await this.userService.findOne(updateBillDto.userId).select('balance');
+      const userDoc = await this.userService.findOne(updateBillDto.userId);
       const { amount } = await this.billModel.findById(id).select('amount');
-      console.log(amount, balance);
-      if (amount > balance) {
+      if (amount > userDoc.balance) {
         throw new Error('Insufficient balance');
       }
-      await this.userService.deductBalance(updateBillDto.userId, balance, amount);
+      await this.userService.deductBalance(updateBillDto.userId, userDoc.balance, amount);
+      await this.mailService.sendMail(userDoc);
       return this.billModel.findByIdAndUpdate(id, updateBillDto, { new: true });
     } catch (e) {
       return e.message;
