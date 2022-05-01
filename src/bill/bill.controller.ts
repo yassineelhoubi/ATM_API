@@ -22,9 +22,9 @@ export class BillController {
     return this.billService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBillDto: UpdateBillDto) {
-    return this.billService.update(id, updateBillDto);
+  @Patch('pay')
+  update(@Body() updateBillDto: UpdateBillDto) {
+    return this.billService.update( updateBillDto);
   }
 
   @Delete(':id')

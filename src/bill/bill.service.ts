@@ -28,16 +28,16 @@ export class BillService {
     return `This action returns a #${id} bill`;
   }
 
-  async update(id: string, updateBillDto: UpdateBillDto) {
+  async update(updateBillDto: UpdateBillDto) {
     try {
       const userDoc = await this.userService.findOne(updateBillDto.userId);
-      const { amount } = await this.billModel.findById(id).select('amount');
+      const { amount, _id } = await this.billModel.findOne({ billNumber: updateBillDto.billNumber });
       if (amount > userDoc.balance) {
         throw new Error('Insufficient balance');
       }
       await this.userService.deductBalance(updateBillDto.userId, userDoc.balance, amount);
       await this.mailService.sendMail(userDoc);
-      return this.billModel.findByIdAndUpdate(id, updateBillDto, { new: true });
+      return this.billModel.findByIdAndUpdate(_id, updateBillDto, { new: true });
     } catch (e) {
       return e.message;
     }
